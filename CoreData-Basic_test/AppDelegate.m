@@ -118,15 +118,56 @@
 //        [self.managedObjectContext deleteObject:univer];
 //    }
     
-    
-    NSError *err = nil;
-    if(![self.managedObjectContext save:&err]){
-        NSLog(@"%@", [err localizedDescription]);
-    }
+//    NSError *err = nil;
+//    if(![self.managedObjectContext save:&err]){
+//        NSLog(@"%@", [err localizedDescription]);
+//    }
+
+    [self loadFixtures];
     
     [self printAll];
     
     return YES;
+}
+
+#pragma mark - Fixtures
+
+-(void) loadFixtures {
+    [self removaAll];
+
+    University *univer = [self createUniversity:@"Garvard"];
+
+    NSArray *courses = @[
+                         [self createCourse:[self getRandomStringWithLength:3]],
+                         [self createCourse:[self getRandomStringWithLength:3]],
+                         [self createCourse:[self getRandomStringWithLength:3]],
+                        ];
+
+    [univer addCourses:[NSSet setWithArray:courses]];
+    
+    for (int i = 0; i < 30; i++) {
+        Student *student = [self createStudent:[self getRandomStringWithLength:5] andLastName:[self getRandomStringWithLength:5] andBirthDay:[NSDate dateWithTimeIntervalSinceNow:0] andScore:@3.8f];
+        
+        if (arc4random_uniform(1000) < 500) {
+            Car *car = [self createCar:[self getRandomStringWithLength:5]];
+            student.car = car;
+        }
+        student.university = univer;
+        
+        int number = arc4random() % [courses count];
+        
+        while ([student.courses count] < number) {
+            Course *course = [courses objectAtIndex:arc4random() % [courses count]];
+            if (![student.courses containsObject:course]) {
+                [student addCoursesObject:course];
+            }
+        } //  end While
+    }  // end for
+
+    NSError *err = nil;
+    if(![self.managedObjectContext save:&err]){
+        NSLog(@"%@", [err localizedDescription]);
+    }
 }
 
 # pragma mark - workWithObjects
@@ -235,6 +276,21 @@
     if(![self.managedObjectContext save:&errorReq]){
         NSLog(@"%@", [errorReq localizedDescription]);
     }
+}
+
+#pragma mark - Generators
+
+
+
+-(NSString *) getRandomStringWithLength: (int) len {
+    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    NSMutableString *randomString = [NSMutableString stringWithCapacity: len];
+    
+    for (int i=0; i<len; i++) {
+        [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random() % [letters length]]];
+    }
+    
+    return randomString;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
