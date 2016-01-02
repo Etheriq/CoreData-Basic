@@ -15,6 +15,7 @@
 		298079F61C22F77300A919F4 /* Car.m in Sources */ = {isa = PBXBuildFile; fileRef = 298079F41C22F77300A919F4 /* Car.m */; };
 		298079FB1C23126800A919F4 /* University+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 298079F81C23126800A919F4 /* University+CoreDataProperties.m */; };
 		298079FC1C23126800A919F4 /* University.m in Sources */ = {isa = PBXBuildFile; fileRef = 298079FA1C23126800A919F4 /* University.m */; };
+		298456391C37E3DC00294D15 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 298456381C37E3DC00294D15 /* DataManager.m */; };
 		29B894B51C21B70A001F6BDF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B894B41C21B70A001F6BDF /* main.m */; };
 		29B894B81C21B70A001F6BDF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B894B71C21B70A001F6BDF /* AppDelegate.m */; };
 		29B894BB1C21B70A001F6BDF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B894BA1C21B70A001F6BDF /* ViewController.m */; };
@@ -41,6 +42,8 @@
 		298079F81C23126800A919F4 /* University+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "University+CoreDataProperties.m"; sourceTree = "<group>"; };
 		298079F91C23126800A919F4 /* University.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = University.h; sourceTree = "<group>"; };
 		298079FA1C23126800A919F4 /* University.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = University.m; sourceTree = "<group>"; };
+		298456371C37E3DC00294D15 /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
+		298456381C37E3DC00294D15 /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
 		29B894B01C21B70A001F6BDF /* CoreData-Basic_test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CoreData-Basic_test.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		29B894B41C21B70A001F6BDF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B894B61C21B70A001F6BDF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -110,6 +113,8 @@
 				298079F01C22B81E00A919F4 /* Models */,
 				29B894B61C21B70A001F6BDF /* AppDelegate.h */,
 				29B894B71C21B70A001F6BDF /* AppDelegate.m */,
+				298456371C37E3DC00294D15 /* DataManager.h */,
+				298456381C37E3DC00294D15 /* DataManager.m */,
 				29B894B91C21B70A001F6BDF /* ViewController.h */,
 				29B894BA1C21B70A001F6BDF /* ViewController.m */,
 				29B894BC1C21B70A001F6BDF /* Main.storyboard */,
@@ -207,6 +212,7 @@
 				29B894B81C21B70A001F6BDF /* AppDelegate.m in Sources */,
 				2974FEC01C2AECF9002CC00B /* Course.m in Sources */,
 				298079FC1C23126800A919F4 /* University.m in Sources */,
+				298456391C37E3DC00294D15 /* DataManager.m in Sources */,
 				29B894C11C21B70A001F6BDF /* CoreData_Basic_test.xcdatamodeld in Sources */,
 				29B894B51C21B70A001F6BDF /* main.m in Sources */,
 				298079EF1C22B7D900A919F4 /* Student.m in Sources */,

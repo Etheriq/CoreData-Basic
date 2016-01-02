@@ -7,8 +7,11 @@
 //
 
 #import "ViewController.h"
+#import "DataManager.h"
 
 @interface ViewController ()
+
+@property(strong, nonatomic) NSManagedObjectContext *managedContext;
 
 @end
 
@@ -22,6 +25,15 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (NSManagedObjectContext *) managedContext {
+    
+    if (!_managedContext) {
+        _managedContext = [[DataManager Manager] managedObjectContext];
+    }
+    
+    return _managedContext;
 }
 
 @end
