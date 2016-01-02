@@ -123,9 +123,15 @@
 //        NSLog(@"%@", [err localizedDescription]);
 //    }
 
-    [self loadFixtures];
+//    ********  Fetch  ************
     
-    [self printAll];
+//    [self loadFixtures];
+    
+    [self printEntity:[self getAllStudents:@"Student"]];
+    NSLog(@"   *******************   ");
+    [self printEntity:[self gueryForCourseEntity]];
+    NSLog(@"   *******************   ");    
+//    [self printAll];
     
     return YES;
 }
@@ -145,8 +151,8 @@
 
     [univer addCourses:[NSSet setWithArray:courses]];
     
-    for (int i = 0; i < 30; i++) {
-        Student *student = [self createStudent:[self getRandomStringWithLength:5] andLastName:[self getRandomStringWithLength:5] andBirthDay:[NSDate dateWithTimeIntervalSinceNow:0] andScore:@3.8f];
+    for (int i = 0; i < 100; i++) {
+        Student *student = [self createStudent:[self getRandomStringWithLength:5] andLastName:[self getRandomStringWithLength:5] andBirthDay:[NSDate dateWithTimeIntervalSinceNow:0] andScore:[NSNumber numberWithFloat:[self getRandomFloatFrom:1.5f andTo:3.9f]]];
         
         if (arc4random_uniform(1000) < 500) {
             Car *car = [self createCar:[self getRandomStringWithLength:5]];
@@ -220,6 +226,22 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *description = [NSEntityDescription entityForName:entity inManagedObjectContext:self.managedObjectContext];
     [request setEntity:description];
+    [request setFetchBatchSize:25];   // подгружать по 25 штук
+    // sorting (firstName then lastName)
+    NSSortDescriptor *firstNameSort = [[NSSortDescriptor alloc] initWithKey:@"firstName" ascending:YES];
+    NSSortDescriptor *lastNameSort = [[NSSortDescriptor alloc] initWithKey:@"lastName" ascending:YES];
+    NSSortDescriptor *score = [[NSSortDescriptor alloc] initWithKey:@"score" ascending:NO];
+    [request setSortDescriptors:@[score, firstNameSort, lastNameSort]];
+    NSArray *validNames = @[@"MfTse", @"LCpYM"];
+
+    NSPredicate *predicat = [NSPredicate predicateWithFormat:@"score > %f and score <= %f and courses.@count >= %d and firstName in %@", 2.1, 2.33, 2, validNames];
+//    NSPredicate *predicat = [NSPredicate predicateWithFormat:@"any score >= %f", 2.1];
+    
+//    NSPredicate *predicat = [NSPredicate predicateWithFormat:@"@avg.students.score >= %f", 2.1];  //  for course entity example all courses where students with average score >= 2.1
+    
+    [request setPredicate:predicat];
+    
+    
     NSError *errorReq = nil;
     
     NSArray *res = nil;
@@ -230,23 +252,37 @@
     return res;
 }
 
-- (NSArray*) printAll {
+-(NSArray *) gueryForCourseEntity {
+    // Read
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *description = [NSEntityDescription entityForName:@"Course" inManagedObjectContext:self.managedObjectContext];
+    [request setEntity:description];
+    [request setFetchBatchSize:25];   // подгружать по 25 штук
+    // sorting (firstName then lastName)
+    NSSortDescriptor *nameDescr = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    [request setSortDescriptors:@[nameDescr]];
     
-    NSArray *all = [self getAllStudents:@"BaseObj"];
-    NSLog(@"   *******************   ");
-    NSLog(@"Total rows - %li", [all count]);
+//    NSPredicate *predicat = [NSPredicate predicateWithFormat:@"@avg.students.score >= %f", 1.0];  //  for course entity example all courses where students with average score >= 2.1
+    NSPredicate *predicat = [NSPredicate predicateWithFormat:@"subquery(students, $student, $student.car.model == %@).@count >= %d", @"BryzS", 1];
+    [request setPredicate:predicat];
     
-//    for (Student *student in all){
-//        NSLog(@"%@ %@ - %@", student.firstName, student.lastName, student.score);
-//    }
+    
+    NSError *errorReq = nil;
+    
+    NSArray *res = nil;
+    if (!(res = [self.managedObjectContext executeFetchRequest:request error:&errorReq])) {
+        NSLog(@"GetAll error: %@", [errorReq localizedDescription]);
+    }
+    
+    return res;
+}
 
-    // after adding base obj
-    
-    for (id object in all) {
-        
+- (void) printEntity:(NSArray*) entities{
+    NSLog(@"rows: %li", [entities count]);
+    for (id object in entities) {
         if ([object isKindOfClass:[Student class]]) {
             Student *student = (Student*)object;
-            NSLog(@"%@ %@ - %@ (Car is %@) (Univer is %@)", student.firstName, student.lastName, student.score, student.car.model, student.university.name);
+            NSLog(@"%@ %@: score = %1.2f (Car is %@) (Univer is %@)", student.firstName, student.lastName, [student.score floatValue], student.car.model, student.university.name);
         } else if ([object isKindOfClass:[Car class]]) {
             Car *car = (Car*)object;
             NSLog(@"Car model is %@, Owner is %@ %@", car.model, car.owner.firstName, car.owner.lastName);
@@ -257,9 +293,15 @@
             Course *cource = (Course*) object;
             NSLog(@"Course name is %@, Students %li", cource.name, [cource.students count]);
         }
-        
-//        NSLog(@"%@", object);
     }
+}
+
+- (NSArray*) printAll {
+    
+    NSArray *all = [self getAllStudents:@"BaseObj"];
+    NSLog(@"   *******************   ");
+    
+    [self printEntity:all];
     
     return all;
 }
@@ -280,7 +322,10 @@
 
 #pragma mark - Generators
 
-
+- (CGFloat) getRandomFloatFrom:(CGFloat) from andTo:(CGFloat) to {
+    
+    return (from * 100 + arc4random_uniform(to * 1000 + .1f - from * 1000)) / 1000;
+}
 
 -(NSString *) getRandomStringWithLength: (int) len {
     NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";

@@ -27,8 +27,8 @@
     <elements>
         <element name="BaseObj" positionX="-13583" positionY="623" width="128" height="43"/>
         <element name="Car" positionX="-13400" positionY="800" width="128" height="73"/>
+        <element name="Course" positionX="-13782" positionY="783" width="128" height="88"/>
         <element name="Student" positionX="-13590" positionY="755" width="144" height="148"/>
         <element name="University" positionX="-14031" positionY="815" width="128" height="88"/>
-        <element name="Course" positionX="-13782" positionY="783" width="128" height="88"/>
     </elements>
 </model>
